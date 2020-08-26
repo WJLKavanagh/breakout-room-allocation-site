@@ -9,5 +9,9 @@ def index(request):
 
 
 def query(request, participants, rounds):
-    context = {"participants":participants, "rounds":rounds}
+    try:
+        allocations = Allocation.objects.filter(num_participants=participants, num_rounds=rounds)
+    except Allocation.DoesNotExist:
+        allocations = None
+    context = {"participants":participants, "rounds":rounds, "allocations":allocations}
     return render(request, "groupings/query.html", context)

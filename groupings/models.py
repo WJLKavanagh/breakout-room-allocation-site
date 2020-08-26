@@ -4,7 +4,25 @@ from django.db import models
 class Allocation(models.Model):
 
     def __str__(self):
-        return "{0} participants in {1} rounds".format(self.num_participants, self.num_rounds)
+        
+        a = eval(self.matching)     # evaluate allocation string
+        max_size = 0
+        min_size = self.num_participants
+        for round in a:
+            for g in round:
+                if len(g) > max_size:
+                    max_size = len(g)
+                if len(g) < min_size:
+                    min_size = len(g)
+        if min_size == max_size:
+            return "{0} rounds for {1} with group size of {2}".format(self.num_rounds, self.num_participants, min_size)
+        return "{0} rounds for {1} with group size between {2} and {3}".format(self.num_rounds, self.num_participants, min_size, max_size)
+        
+        return str(eval(self.matching))     # evaluate allocation string
+        ret_string = ""
+        for round in a:
+            ret_string = ret_string + str(round) + "\n\n"
+        return ret_string
 
     num_participants = models.IntegerField("Total number of participants", default=1)
     num_rounds = models.IntegerField("Rounds of allocation", default=1)
@@ -39,4 +57,18 @@ class Allocation(models.Model):
                                 print(a)
                                 return False
         return True
+
+    def group_size(self):
+        a = eval(self.matching)     # evaluate allocation string
+        max_size = 0
+        min_size = self.num_participants
+        for round in a:
+            for g in round:
+                if len(g) > max_size:
+                    max_size = len(g)
+                if len(g) < min_size:
+                    min_size = len(g)
+        if min_size == max_size:
+            return min_size
+        return min_size, max_size
 

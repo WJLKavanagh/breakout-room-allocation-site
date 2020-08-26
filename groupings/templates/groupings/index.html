@@ -36,7 +36,7 @@
 
         <div class="contained-fluid" >
 
-                <h3>Your requirements</h1>
+                <h3>Your requirements</h3>
 
         </div>
         
@@ -52,7 +52,7 @@
 
             <div class="mx-auto mt-5" style="width: 200px;">
                 <button type="button" class="btn btn-primary btn-lg">
-                    <a href="/allocate/"+document.getElementById('participants').value+"over"+document.getElementById('participants').value id="QueryButton" style="color:white">Find Allocations</a>
+                    <a href="/allocate/100over3" id="QueryButton" style="color:white">Find Allocations</a>
                 </button>
             </div>
 
@@ -84,6 +84,9 @@
         participants_slider.oninput = function() {
             participants_output.innerHTML = this.value;
             participants_form.value = this.value;
+
+            document.getElementById("QueryButton").href = "/allocate/"+document.getElementById('participants').value+"over"+document.getElementById('rounds').value;
+
         }
 
         // Set the value on the label for the rounds slider.
@@ -94,6 +97,8 @@
         rounds_slider.oninput = function() {
             rounds_output.innerHTML = this.value;
             rounds_form.value = this.value;
+            document.getElementById("QueryButton").href = "/allocate/"+document.getElementById('participants').value+"over"+document.getElementById('rounds').value;
+
         }
 
        
