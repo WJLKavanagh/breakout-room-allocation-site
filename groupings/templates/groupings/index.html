@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <title>Main</title>
+  </head>
+  <body>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+        
+    <div class="max-auto container pt-5 pb-5 mt-5" style="background-color:hotpink">
+        
+        <div class="contained-fluid" >
+
+            <h3>BoRAT - Breakout Room Allocation Tool</h3>
+
+            <p>Simply fill in your requirements and hit 'Find Allocations' below to see your options.</p>
+
+        </div>
+        
+    </div>
+
+    <div class="max-auto container mt-5 pt-5 pb-5 mb-5" style="background-color:aliceblue">
+
+        <div class="contained-fluid" >
+
+                <h3>Your requirements</h1>
+
+        </div>
+        
+        <div class="contained-fluid" >
+            <form>
+                <div class="form-group mt-5">
+                    <label for="formControlRange">Participants: <span id=ParticipantsRangeSliderVal></span></label>
+                    <input type="range" class="form-control-range" min="3" max="200" value="20" id="ParticipantsRange">
+                    <label class="mt-2" for="formControlRange">Rounds: <span id=RoundsRangeSliderVal></span></label>
+                    <input type="range" class="form-control-range" min="2" max="20" value="5" id="RoundsRange">
+                </div>
+            </form>
+
+            <div class="mx-auto mt-5" style="width: 200px;">
+                <button type="button" class="btn btn-primary btn-lg">
+                    <a href="/allocate/"+document.getElementById('participants').value+"over"+document.getElementById('participants').value id="QueryButton" style="color:white">Find Allocations</a>
+                </button>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <input type="hidden" id="participants" name="participant_numbers" value="20">
+    <input type="hidden" id="rounds" name="round_numbers" value="5">
+
+
+    <div class="fixed-bottom">
+        <!-- <img src="../../static/images/uoglogo.png" %}" alt="My image"> -->
+        Provided by the Computer Science Department at the University of Glasgow.
+    </div>
+
+
+
+
+
+    <script>
+        // Set the value on the label for the participants slider.
+        var participants_slider = document.getElementById("ParticipantsRange");
+        var participants_output = document.getElementById("ParticipantsRangeSliderVal");
+        var participants_form = document.getElementById("participants");
+        participants_output.innerHTML = participants_slider.value;
+        participants_slider.oninput = function() {
+            participants_output.innerHTML = this.value;
+            participants_form.value = this.value;
+        }
+
+        // Set the value on the label for the rounds slider.
+        var rounds_slider = document.getElementById("RoundsRange");
+        var rounds_output = document.getElementById("RoundsRangeSliderVal");
+        var rounds_form = document.getElementById("rounds");
+        rounds_output.innerHTML = rounds_slider.value;
+        rounds_slider.oninput = function() {
+            rounds_output.innerHTML = this.value;
+            rounds_form.value = this.value;
+        }
+
+       
+    </script>
+
+</body>
+</html>
