@@ -33,32 +33,32 @@
           <div id="accordion">
           {% for alloc in allocations %}
           <div class="card">
-            <div class="card-header" id="headingOne">
+            <div class="card-header" id="heading{{alloc.pk}}">
               <h5 class="mb-0">
-                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse{{alloc.pk}}" aria-expanded="false" aria-controls="collapse{{alloc.pk}}">
                   {{alloc}}
                 </button>
               </h5>
             </div>
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div id="collapse{{alloc.pk}}" class="collapse" aria-labelledby="heading{{alloc.pk}}" data-parent="#accordion">
               <div class="card-body">
                 <p>{{alloc.nice_display | safe}}</p>
                 <p>Options:</p>  
                 <div class="container">
                   <div class="row">
-                    <div class="col-sm text-center">
-                      <a type="button" class="btn btn-success">
+                    <div class="col text-center">
+                      <a type="button" class="btn btn-success" href="{% url 'to_download' alloc.pk %}">
                         Download allocation
                       </a>
                     </div>
-                    <div class="col-sm text-center">
-                      <a type="button" class="btn btn-success">
+                    <!-- <div class="col text-center">
+                       <a type="button" class="btn btn-success">
                         Import addresses from file
                       </a>
-                    </div>
-                    <div class="col-sm text-center">
-                      <a type="button" class="btn btn-success">
-                        Enter addresses manually
+                    </div> -->
+                    <div class="col text-center">
+                      <a type="button" class="btn btn-success" href="{% url 'to_parse' alloc.pk %}">
+                        Parse email addresses
                       </a>
                     </div>
                   </div>
@@ -67,7 +67,7 @@
             </div>
           </div>
           {% endfor %}
-        </div>
+          </div>
         {% else %} 
           <p>We have no allocations for those specifications, try with different parameters below.</p>
         {% endif %}
