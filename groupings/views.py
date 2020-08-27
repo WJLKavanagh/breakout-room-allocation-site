@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from .models import Allocation
 
 def index(request):
-    return render(request, 'groupings/index.html', None)
+    return render(request, 'groupings/index.html', {"allocations":Allocation.objects.all()})
 
 
 def query(request, participants, rounds):
@@ -15,3 +15,6 @@ def query(request, participants, rounds):
         allocations = None
     context = {"participants":participants, "rounds":rounds, "allocations":allocations}
     return render(request, "groupings/query.html", context)
+
+def allocation(request, alloc):
+    return render(request, "groupings/allocation.html", None)

@@ -11,54 +11,128 @@
       <title>Result</title>
   </head>
   <body>
-    <div class="max-auto container pt-5 pb-5 mt-5" style="background-color:hotpink">
-        
 
-      <div class="contained-fluid" >
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+    <div class="max-auto container pt-3 pb-3 mt-5" style="background-color:hotpink">
+        
+      <div class="container-fluid" >
 
         <h3>Matching Allocations for {{participants}} participants over {{rounds}} rounds</h3>
 
       </div>
 
-      <div class="contained-fluid" >
+      <div class="container-fluid mb-3" >
 
-        <p>We have {{allocations|length}} possible allocations
         {% if allocations %}
-          <ul>
-            {% for alloc in allocations %}
-              <li>{{alloc}}</li>
-            {% endfor %}
-          </ul>
+          <p>We have {{allocations|length}} possible allocation(s):</p>
+          <div id="accordion">
+          {% for alloc in allocations %}
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  {{alloc}}
+                </button>
+              </h5>
+            </div>
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+              <div class="card-body">
+                <p>{{alloc.nice_display | safe}}</p>
+                <p>Options:</p>  
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm text-center">
+                      <a type="button" class="btn btn-success">
+                        Download allocation
+                      </a>
+                    </div>
+                    <div class="col-sm text-center">
+                      <a type="button" class="btn btn-success">
+                        Import addresses from file
+                      </a>
+                    </div>
+                    <div class="col-sm text-center">
+                      <a type="button" class="btn btn-success">
+                        Enter addresses manually
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
         {% else %} 
-          </p>sorry, try with different parameters below.</p>
+          <p>We have no allocations for those specifications, try with different parameters below.</p>
         {% endif %}
+  
+    </div> 
+    
+      <div class="d-flex justify-content-center">
+        <a href="/allocate/." type="button" class="btn btn-lg btn-primary align-self-center">
+          Clear search
+        </a>
+      </div>  
+    </div>
+
+
+    <div class="max-auto container mt-3 pt-2 pb-5" style="background-color:aliceblue">
+
+      <div class="container-fluid" >
+
+              <h3>Your requirements</h3>
+
       </div>
-
       
-  </div>
+      <div class="container-fluid" >
+          <form>
+              <div class="form-group mt-3">
+                  
+                  <input type="number" class="form-control form-control-lg mt-3 mb-3" id="participantsForm" onchange="updateURL()" placeholder="Class size">
+                  <input type="number" class="form-control form-control-lg mt-3 mb-3" id="roundsForm" onchange="updateURL()" placeholder="Number of rounds">
 
-  <div class="max-auto container mt-5 pt-5 pb-5 mb-5" style="background-color:aliceblue">
+              </div>
+          </form>
 
-    <div class="contained-fluid">
+          <div class="d-flex justify-content-center">
+            <a href="/allocate/100over3" id="QueryButton" type="button" class="btn btn-lg btn-primary">
+              Find allocations
+            </a>
+          </div> 
 
-      <button type="button"  class="btn btn-info">
-        <a href="." style="color:white">Find More Allocations</a>
-      </button>
+
+
+
+      </div>
 
     </div>
 
-  </div>
+    <div class="max-auto container mt-3">
+        <div class="row">
+            <div class="col-sm">
+                <p>Provided by the Computer Science Department at the University of Glasgow.</p>
+            </div>
+        </div>
+    </div>
 
 
-  <div class="fixed-bottom">
-      <!-- <img src="../../static/images/uoglogo.png" %}" alt="My image"> -->
-      Provided by the Computer Science Department at the University of Glasgow.
-  </div>
 
-      <!-- Optional JavaScript -->
-      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-  </body>
+
+
+  <script>
+
+      updateURL = function() {
+          document.getElementById("QueryButton").href = "/allocate/"+document.getElementById('participantsForm').value+"over"+document.getElementById('roundsForm').value;
+      }
+
+  </script>
+
+
+</body>
 </html>

@@ -72,3 +72,17 @@ class Allocation(models.Model):
             return min_size
         return min_size, max_size
 
+    @property
+    def nice_display(self):
+        a = eval(self.matching)
+        ret_string = ""
+        for i in range(len(a)):
+            ret_string += "Round " + str(i+1) + ":<br>&nbsp;&nbsp;&nbsp;&nbsp;"
+            for j in range(len(a[i])):
+                ret_string = ret_string + str(a[i][j])
+                if j < len(a[i])-1:
+                    ret_string += ", "
+                else:
+                    ret_string += "<br>"
+
+        return ret_string
