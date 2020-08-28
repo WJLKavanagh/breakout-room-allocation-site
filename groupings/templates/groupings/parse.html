@@ -52,10 +52,6 @@
                         <input type="submit" value="Upload">
                       </form>
                     </div>
-                  </div>
-                  <div class="d-flex justify-content-center">
-                    
-                    
                   </div>  
                 </div>
               </div>
@@ -71,15 +67,20 @@
               <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                 <div class="card-body">
                   <p>Type in an email address for each participant as a comma-separated list</p>
-                  <div class="input-group input-group-lg">
-                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" id="emails_field">
+                  <div class="input-group mb-3">
+                    <div class="custom-text">
+                      <form action="{% url 'parse_text' alloc.id %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                                                
+                        {% for element in text_input_form%}
+                          {{ element }}
+                        {% endfor %}
+
+                        <input type="submit" value="Parse text">
+                      </form>
+                    </div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-center mb-3">
-                  <a onclick="this.href='{% url 'parse_text' alloc.id " + document.GetElementById("emails_field").value + " %}" type="button" class="btn btn-danger align-self-center">
-                    Parse text
-                  </a>
-                </div>  
               </div>
             </div>
           </div>

@@ -7,7 +7,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 
 from .models import Allocation
-from .forms import UploadFileForm
+from .forms import UploadFileForm, ManualFileForm
 
 def index(request):
     return render(request, 'groupings/index.html', {"allocations":Allocation.objects.all()})
@@ -22,7 +22,7 @@ def query(request, participants, rounds):
     return render(request, "groupings/query.html", context)
 
 def parse(request, alloc_id):
-    return render(request, "groupings/parse.html", {"alloc":Allocation.objects.get(pk=alloc_id), 'upload_form': UploadFileForm()})
+    return render(request, "groupings/parse.html", {"alloc":Allocation.objects.get(pk=alloc_id), 'upload_form': UploadFileForm(), 'text_input_form': ManualFileForm()})
 
 def download(request, alloc_id):
     # Get the object from the DB
@@ -36,21 +36,6 @@ def download(request, alloc_id):
     
     return response
     
-# def upload_file(request):
-#     if request.method == 'POST':
-#         form = UploadFileForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             handle_uploaded_file(request.FILES['file'])
-#             return HttpResponse('that worked.', content_type="text/plain")
-#     else:
-#         form = UploadFileForm()
-#     return render(request, 'upload.html', {'form': form})
-
-# def handle_uploaded_file(f):
-#     with open('some/file/name.txt', 'wb+') as destination:
-#         for chunk in f.chunks():
-#             destination.write(chunk)
-
 def parse_upload(request, alloc_id):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -67,26 +52,34 @@ def parse_upload(request, alloc_id):
         return HttpResponse('Not a Post.', content_type="text/plain")
 
 
-def parse_text(request, alloc_id, emails):
-    alloc = Allocation.objects.get(pk=alloc_id)
-    parsed_allocation = do_allocation_parsing(emails, alloc)
-    response = HttpResponse(parsed_allocation, content_type="text/plain")
-    response['Content-Disposition'] = 'attachment; filename="allocation.txt"' 
-    return response
+def parse_text(request, alloc_id):
+    if request.method == 'POST':
+        form = ManualFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            print(form['text_content'].value())
+            file_content = str(form['text_content'].value())
+            alloc = Allocation.objects.get(pk=alloc_id)
+            parsed_allocation = do_allocation_parsing(file_content, alloc)
+            response = HttpResponse(parsed_allocation, content_type="text/plain")
+            response['Content-Disposition'] = 'attachment; filename="allocation.txt"' 
+            return response
+        else:
+            return HttpResponse('Invalid form submitted:\n'+str(request.form['text_content']), content_type="text/plain")
+    else:
+        return HttpResponse('Not a Post.', content_type="text/plain")
 
 
 def do_allocation_parsing(emails, allocation_model):
     
+    print(emails)
     allocation = eval(allocation_model.matching)
 
     # Find bounds of id used in allocation. IDs must be contiguous or we're in trouble.
     minid = 100    
     maxid = 0
 
-    print(allocation[0])
 
     for group in allocation[0]:
-        print(group)
         group_as_int = [int(x) for x in group]
         if min(group_as_int) < minid:
             minid = min(group_as_int)
