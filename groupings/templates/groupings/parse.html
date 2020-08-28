@@ -18,6 +18,8 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 
+    {% load static %}
+
     <div class="max-auto container pt-3 pb-3 mt-5" style="background-color:hotpink">
         
       <div class="container-fluid mb-3">
@@ -39,18 +41,22 @@
                 <div class="card-body">
                   <p>Upload a file of email addresses for each participant as a comma-separated list</p>
                   <div class="input-group mb-3">
-                    <!-- <div class="input-group-prepend">
-                      <span class="input-group-text">Upload</span>
-                    </div> -->
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="inputGroupFile01">
-                      <label class="custom-file-label" for="inputGroupFile01">Choose addresses file</label>
+                      <form action="{% url 'parse_upload' alloc.id %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                                                
+                        <input type="file" name="file" />
+                        <input type="submit" value="Upload File" name="submit" />
+                        <!-- <input type="file" class="file-input" name="file">
+                        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label> -->
+
+                        <!-- <a type="submit" class="btn btn-success" href="{% url 'parse_upload' alloc.id %}">Upload</a> -->
+                      </form>
                     </div>
                   </div>
                   <div class="d-flex justify-content-center">
-                    <a href="/allocate/." type="button" class="btn btn-success align-self-center">
-                      Parse file
-                    </a>
+                    
+                    
                   </div>  
                 </div>
               </div>
@@ -71,19 +77,17 @@
                   </div>
                 </div>
                 <div class="d-flex justify-content-center mb-3">
-                  <a href="/allocate/." type="button" class="btn btn-success align-self-center">
+                  <a href="/allocate/." type="button" class="btn btn-danger align-self-center">
                     Parse text
                   </a>
                 </div>  
               </div>
-              
             </div>
           </div>
-
       </div>
         
       <div class="d-flex justify-content-center">
-        <a href="/allocate/." type="button" class="btn btn-lg btn-primary align-self-center">
+        <a href="/allocate/." type="button" class="btn btn-primary align-self-center">
           Clear search
         </a>
       </div>  
@@ -96,6 +100,12 @@
       <div class="container-fluid" >
 
               <h3>Your requirements</h3>
+
+              {% if uploaded_file_url %}
+                <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+              {% else %}
+                <p>no file</p>
+              {% endif %}
 
       </div>
       
