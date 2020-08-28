@@ -14,7 +14,7 @@ def index(request):
 
 def query(request, participants, rounds):
     try:
-        allocations = Allocation.objects.filter(num_participants=participants, num_rounds=rounds)
+        allocations = Allocation.objects.filter(num_participants=participants, num_rounds__gte=rounds)
     except Allocation.DoesNotExist:
         allocations = None
     
@@ -31,7 +31,7 @@ def download(request, alloc_id):
     except Allocation.DoesNotExist:
         return HttpResponse("Unknown matching ID.", content_type='text/plain')
     
-    response = HttpResponse(db_obj.matching, content_type='text/plain')
+    response = HttpResponse(db_obj.download_format, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename="allocation.txt"'
     
     return response
@@ -58,21 +58,33 @@ def parse_upload(request, alloc_id):
             file_content = request.FILES['upload_file'].read().decode()
             alloc = Allocation.objects.get(pk=alloc_id)
             parsed_allocation = do_allocation_parsing(file_content, alloc)
-            return HttpResponse(parsed_allocation, content_type="text/plain")
+            response = HttpResponse(parsed_allocation, content_type="text/plain")
+            response['Content-Disposition'] = 'attachment; filename="allocation.txt"' 
+            return response
         else:
             return HttpResponse('Invalid form submitted:\n'+str(request.FILES['upload_file'].read()), content_type="text/plain")
     else:
         return HttpResponse('Not a Post.', content_type="text/plain")
 
 
+def parse_text(request, alloc_id, emails):
+    alloc = Allocation.objects.get(pk=alloc_id)
+    parsed_allocation = do_allocation_parsing(emails, alloc)
+    response = HttpResponse(parsed_allocation, content_type="text/plain")
+    response['Content-Disposition'] = 'attachment; filename="allocation.txt"' 
+    return response
+
+
 def do_allocation_parsing(emails, allocation_model):
     
     allocation = eval(allocation_model.matching)
 
-
     # Find bounds of id used in allocation. IDs must be contiguous or we're in trouble.
     minid = 100    
     maxid = 0
+
+    print(allocation[0])
+
     for group in allocation[0]:
         print(group)
         group_as_int = [int(x) for x in group]
@@ -81,18 +93,30 @@ def do_allocation_parsing(emails, allocation_model):
         if max(group_as_int) > maxid:
             maxid = max(group_as_int)
 
-    if len(emails) != (maxid - minid) + 1:
-        return "Email parsing failed. Expected {0} participants, got {1}".format((maxid-minid)+1, len(emails))
+    if len(emails.split(", ")) != (maxid - minid) + 1:
+        return "Email parsing failed. Expected {0} participants, got {1}".format((maxid-minid)+1, len(emails.split(", ")))
 
     # Rewrite the allocation with email addresses.
     parsed_allocation = "["
-    for rou in allocation:              # for every round
-        parsed_allocation += "["
-        for group in rou:
-            parsed_allocation += "["
-            for id in group:
-                parsed_allocation += emails[int(id)-minid]
-                parsed_allocation += ", "
-            parsed_allocation += "],"
-        parsed_allocation += "],\n"
-    return parsed_allocation + "]"
+
+    for round_index in range(len(allocation)):  # every round.
+        parsed_allocation += "\n\t[\n"      # start of round.
+        for group_index in range(len(allocation[round_index])):     # for group in round
+            parsed_allocation += "\t\t["                                # start of group
+            for participant_index in range(len(allocation[round_index][group_index])):  # for participant in group
+                parsed_allocation += emails.split(", ")[int(allocation[round_index][group_index][participant_index])-minid]     # participant address.
+                if participant_index < len(allocation[round_index][group_index]) - 1:
+                    parsed_allocation += ", "       # continuation of group.
+                else:
+                    parsed_allocation += "]"        # end of group    
+            if group_index < len(allocation[round_index]) - 1:
+                parsed_allocation += ",\n"      # continuation of round
+            else:
+                parsed_allocation += "\n\t]"      # end of round
+        if round_index < len(allocation) - 1:
+            parsed_allocation += ",\n"
+        else:
+            parsed_allocation += "\n]"         # end of allocation    
+    return parsed_allocation   
+
+

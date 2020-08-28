@@ -74,6 +74,9 @@ class Allocation(models.Model):
 
     @property
     def nice_display(self):
+        """
+        Formatting used for query accordion display
+        """
         a = eval(self.matching)
         ret_string = ""
         for i in range(len(a)):
@@ -87,6 +90,28 @@ class Allocation(models.Model):
 
         return ret_string
 
-        
+    @property
+    def download_format(self):
+        """
+        Formatting equivalent to when emails are parsed.
+        """
+        a = eval(self.matching)
+        ret_string = "["
+        for r_i in range(len(a)):       # for round index 
+            ret_string += "\n\t["     # round start
+            for g_i in range(len(a[r_i])):      # for group index in round
+                ret_string += "\n\t\t" + str(a[r_i][g_i])
+                if g_i < len(a[r_i]) - 1:
+                    ret_string += ","
+                else:
+                    ret_string += "\n\t]"
+            if r_i < len(a) - 1:
+                ret_string += ",\n"
+            else:
+                ret_string += "\n]"
+
+        return ret_string
+
+
 class Document(models.Model):
     docfile = models.FileField(upload_to='documents/%Y/%m/%d')

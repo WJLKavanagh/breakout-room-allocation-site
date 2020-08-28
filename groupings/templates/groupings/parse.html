@@ -72,11 +72,11 @@
                 <div class="card-body">
                   <p>Type in an email address for each participant as a comma-separated list</p>
                   <div class="input-group input-group-lg">
-                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                    <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" id="emails_field">
                   </div>
                 </div>
                 <div class="d-flex justify-content-center mb-3">
-                  <a href="/allocate/." type="button" class="btn btn-danger align-self-center">
+                  <a onclick="this.href='{% url 'parse_text' alloc.id " + document.GetElementById("emails_field").value + " %}" type="button" class="btn btn-danger align-self-center">
                     Parse text
                   </a>
                 </div>  
@@ -84,7 +84,7 @@
             </div>
           </div>
       </div>
-        
+
       <div class="d-flex justify-content-center">
         <a href="/allocate/." type="button" class="btn btn-primary align-self-center">
           Clear search
@@ -99,12 +99,6 @@
       <div class="container-fluid" >
 
               <h3>Your requirements</h3>
-
-              {% if uploaded_file_url %}
-                <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
-              {% else %}
-                <p>no file</p>
-              {% endif %}
 
       </div>
       
@@ -123,7 +117,6 @@
                 Find allocations
               </a>
             </div> 
-
 
       </div>
 
