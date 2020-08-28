@@ -56,7 +56,7 @@ def parse_upload(request, alloc_id):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             file_content = request.FILES['upload_file'].read().decode()
-            alloc = Allocation.objects.filter(pk=alloc_id)
+            alloc = Allocation.objects.get(pk=alloc_id)
             parsed_allocation = do_allocation_parsing(file_content, alloc)
             return HttpResponse(parsed_allocation, content_type="text/plain")
         else:
@@ -65,6 +65,34 @@ def parse_upload(request, alloc_id):
         return HttpResponse('Not a Post.', content_type="text/plain")
 
 
-def do_allocation_parsing(emails, allocation):
-    ## basically a zip.
-    return 0
+def do_allocation_parsing(emails, allocation_model):
+    
+    allocation = eval(allocation_model.matching)
+
+
+    # Find bounds of id used in allocation. IDs must be contiguous or we're in trouble.
+    minid = 100    
+    maxid = 0
+    for group in allocation[0]:
+        print(group)
+        group_as_int = [int(x) for x in group]
+        if min(group_as_int) < minid:
+            minid = min(group_as_int)
+        if max(group_as_int) > maxid:
+            maxid = max(group_as_int)
+
+    if len(emails) != (maxid - minid) + 1:
+        return "Email parsing failed. Expected {0} participants, got {1}".format((maxid-minid)+1, len(emails))
+
+    # Rewrite the allocation with email addresses.
+    parsed_allocation = "["
+    for rou in allocation:              # for every round
+        parsed_allocation += "["
+        for group in rou:
+            parsed_allocation += "["
+            for id in group:
+                parsed_allocation += emails[int(id)-minid]
+                parsed_allocation += ", "
+            parsed_allocation += "],"
+        parsed_allocation += "],\n"
+    return parsed_allocation + "]"
