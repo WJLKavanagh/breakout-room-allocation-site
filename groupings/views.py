@@ -17,11 +17,12 @@ def query(request, participants, rounds):
         allocations = Allocation.objects.filter(num_participants=participants, num_rounds=rounds)
     except Allocation.DoesNotExist:
         allocations = None
+    
     context = {"participants":participants, "rounds":rounds, "allocations":allocations}
     return render(request, "groupings/query.html", context)
 
 def parse(request, alloc_id):
-    return render(request, "groupings/parse.html", {"alloc":Allocation.objects.get(pk=alloc_id)})
+    return render(request, "groupings/parse.html", {"alloc":Allocation.objects.get(pk=alloc_id), 'upload_form': UploadFileForm()})
 
 def download(request, alloc_id):
     # Get the object from the DB
@@ -54,12 +55,12 @@ def parse_upload(request, alloc_id):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            file_content = request.FILES['file'].read()
+            file_content = request.FILES['upload_file'].read().decode()
             alloc = Allocation.objects.filter(pk=alloc_id)
             parsed_allocation = do_allocation_parsing(file_content, alloc)
             return HttpResponse(parsed_allocation, content_type="text/plain")
         else:
-            return HttpResponse('Invalid form submitted:\n'+str(request.FILES['file'].read()), content_type="text/plain")
+            return HttpResponse('Invalid form submitted:\n'+str(request.FILES['upload_file'].read()), content_type="text/plain")
     else:
         return HttpResponse('Not a Post.', content_type="text/plain")
 

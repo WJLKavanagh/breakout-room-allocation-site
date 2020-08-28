@@ -45,12 +45,11 @@
                       <form action="{% url 'parse_upload' alloc.id %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                                                 
-                        <input type="file" name="file" />
-                        <input type="submit" value="Upload File" name="submit" />
-                        <!-- <input type="file" class="file-input" name="file">
-                        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label> -->
+                        {% for element in upload_form %}
+                          {{ element }}
+                        {% endfor %}
 
-                        <!-- <a type="submit" class="btn btn-success" href="{% url 'parse_upload' alloc.id %}">Upload</a> -->
+                        <input type="submit" value="Upload">
                       </form>
                     </div>
                   </div>
