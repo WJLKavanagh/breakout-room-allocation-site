@@ -15,8 +15,8 @@ class Allocation(models.Model):
                 if len(g) < min_size:
                     min_size = len(g)
         if min_size == max_size:
-            return "{0} rounds for {1} with group size of {2}".format(self.num_rounds, self.num_participants, min_size)
-        return "{0} rounds for {1} with group size between {2} and {3}".format(self.num_rounds, self.num_participants, min_size, max_size)
+            return "{1} participants for {0} rounds with group size of {2}".format(self.num_rounds, self.num_participants, min_size) #{0} rounds for {1} with group size of {2}
+        return "{1} participants for {0} rounds with group size of {2} and {3}".format(self.num_rounds, self.num_participants, min_size, max_size) #{0} rounds for {1} with group size between {2} and {3}
         
         return str(eval(self.matching))     # evaluate allocation string
         ret_string = ""
