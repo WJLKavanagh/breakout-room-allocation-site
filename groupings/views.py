@@ -21,6 +21,9 @@ def query(request, participants, rounds):
     context = {"participants":participants, "rounds":rounds, "allocations":allocations}
     return render(request, "groupings/query.html", context)
 
+def show_all(request):
+    return render(request, "groupings/all.html", {"allocations":Allocation.objects.all()})
+
 def parse(request, alloc_id):
     return render(request, "groupings/parse.html", {"alloc":Allocation.objects.get(pk=alloc_id), 'upload_form': UploadFileForm(), 'text_input_form': ManualFileForm()})
 

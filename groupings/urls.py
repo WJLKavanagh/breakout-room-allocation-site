@@ -10,7 +10,8 @@ urlpatterns = [
     path('download/<int:alloc_id>', views.download, name="to_download"),
     path('parse/<int:alloc_id>', views.parse, name="parse"),
     path('parse/<int:alloc_id>/match_upload', views.parse_upload, name="parse_upload"),
-    path('parse/<int:alloc_id>/match_text', views.parse_text, name="parse_text")
+    path('parse/<int:alloc_id>/match_text', views.parse_text, name="parse_text"),
+    path('all', views.show_all, name="showall")
 ]
 
 if settings.DEBUG:
