@@ -89,7 +89,7 @@ def do_allocation_parsing(emails, allocation_model):
         if max(group_as_int) > maxid:
             maxid = max(group_as_int)
 
-    if len(emails.split(", ")) != (maxid - minid) + 1:
+    if len(emails.split(",")) != (maxid - minid) + 1:
         return "Email parsing failed. Expected {0} participants, got {1}".format((maxid-minid)+1, len(emails.split(", ")))
 
     # Rewrite the allocation with email addresses.
@@ -100,7 +100,7 @@ def do_allocation_parsing(emails, allocation_model):
         for group_index in range(len(allocation[round_index])):     # for group in round
             parsed_allocation += "\t\t["                                # start of group
             for participant_index in range(len(allocation[round_index][group_index])):  # for participant in group
-                parsed_allocation += emails.split(", ")[int(allocation[round_index][group_index][participant_index])-minid]     # participant address.
+                parsed_allocation += emails.split(",")[int(allocation[round_index][group_index][participant_index])-minid].strip()     # participant address.
                 if participant_index < len(allocation[round_index][group_index]) - 1:
                     parsed_allocation += ", "       # continuation of group.
                 else:
