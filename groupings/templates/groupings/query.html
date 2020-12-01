@@ -101,7 +101,7 @@
           </form>
 
           <div class="d-flex justify-content-center">
-            <a href="/allocate/100over3" id="QueryButton" type="button" class="btn btn-lg btn-primary">
+            <a href="/allocate/9over3" id="QueryButton" type="button" class="btn btn-lg btn-primary">
               Find allocations
             </a>
           </div> 
@@ -126,10 +126,13 @@
 
 
   <script>
-
-      updateURL = function() {
-          document.getElementById("QueryButton").href = "/allocate/"+document.getElementById('participantsForm').value+"over"+document.getElementById('roundsForm').value;
-      }
+        updateURL = function() {
+			var rounds =document.getElementById('roundsForm').value;
+			if (rounds == "") {
+				rounds = "3";
+			}
+            document.getElementById("QueryButton").href = "/allocate/"+document.getElementById('participantsForm').value+"over"+rounds;
+        }
 
   </script>
 
