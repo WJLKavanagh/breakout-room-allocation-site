@@ -22,14 +22,16 @@ def main():
         matching = json.loads(text)
         num_rounds = len(matching)
         #print(num_rounds)
+        expected_participants = filename.split("_")[1]
+        expected_group_sizes = filename.split("(")[1].split(")")[0].split(",")
+        #print(num_participants)
+        if not is_correct(matching, expected_participants, expected_group_sizes):
+            print("Error for matching in {0}".format(filename))
+            #break
         num_participants=0
         for group in matching[0]:
             for participant in group:
                 num_participants +=1
-        #print(num_participants)
-        if not is_correct(matching, num_participants, num_rounds):
-            print("Error for matching in {0}".format(filename))
-            #break
         result.append({
         "model":"groupings.allocation",
         "pk":pkindex,
@@ -48,7 +50,14 @@ def main():
     print ("done")
 
 
-def is_correct(matching, num_participants, num_rounds):
+def is_correct(matching, expected_participants, expected_group_sizes):
+    num_participants=0
+    for group in matching[0]:
+        for participant in group:
+            num_participants +=1
+    if str(num_participants) != expected_participants:
+        print("participants are {0} instead of {1}".format(num_participants, expected_participants))
+        return False
     for participant in range(num_participants):
         matched_with = []
         # checks whether participant appears exactly once each round
@@ -77,12 +86,20 @@ def is_correct(matching, num_participants, num_rounds):
     group_sizes = []
     for roundd in matching:
         for group in roundd:
-            size = len(group)
+            size = str(len(group))
             if size not in group_sizes:
                 group_sizes.append(size)
     if len(group_sizes)>2:
         print("Group sizes vary too much: {0}".format(group_sizes))
         return False
+    for size in group_sizes:
+        if size not in expected_group_sizes:
+            print("Group sizes are not as advertises: {0} instead of {1}".format(group_sizes, expected_group_sizes))
+            return False
+    for size in expected_group_sizes:
+        if size not in group_sizes:
+            print("Group sizes are not as advertises: {0} instead of {1}".format(group_sizes, expected_group_sizes))
+            return False
     return True
 
 
