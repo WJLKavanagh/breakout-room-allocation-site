@@ -74,23 +74,17 @@ def parse_text(request, alloc_id):
 
 def do_allocation_parsing(emails, allocation_model):
     
-    print(emails)
+    #print(emails)
     allocation = eval(allocation_model.matching)
+    participants = allocation_model.num_participants
 
-    # Find bounds of id used in allocation. IDs must be contiguous or we're in trouble.
-    minid = 100    
-    maxid = 0
+    # Find bounds of id used in allocation. IDs must be contiguous or we're in trouble. - Old
+    # Actually we do not need to do  this, we can just get the number of participants from the database
+    # This is stored and should reduce computation time and complexity
+    parsed_emails = [email.strip() for email in emails.split(",") if email.strip()!= ""]
 
-
-    for group in allocation[0]:
-        group_as_int = [int(x) for x in group]
-        if min(group_as_int) < minid:
-            minid = min(group_as_int)
-        if max(group_as_int) > maxid:
-            maxid = max(group_as_int)
-
-    if len(emails.split(",")) != (maxid - minid) + 1:
-        return "Email parsing failed. Expected {0} participants, got {1}".format((maxid-minid)+1, len(emails.split(", ")))
+    if len(parsed_emails) != participants:
+        return "Email parsing failed. Expected {0} participants, got {1}".format(participants, len(parsed_emails))
 
     # Rewrite the allocation with email addresses.
     parsed_allocation = "["
@@ -100,7 +94,7 @@ def do_allocation_parsing(emails, allocation_model):
         for group_index in range(len(allocation[round_index])):     # for group in round
             parsed_allocation += "\t\t["                                # start of group
             for participant_index in range(len(allocation[round_index][group_index])):  # for participant in group
-                parsed_allocation += emails.split(",")[int(allocation[round_index][group_index][participant_index])-minid].strip()     # participant address.
+                parsed_allocation += parsed_emails[int(allocation[round_index][group_index][participant_index])]     # participant address.
                 if participant_index < len(allocation[round_index][group_index]) - 1:
                     parsed_allocation += ", "       # continuation of group.
                 else:
