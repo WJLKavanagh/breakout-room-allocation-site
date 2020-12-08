@@ -90,16 +90,59 @@ def is_correct(matching, expected_participants, expected_group_sizes):
             if size not in group_sizes:
                 group_sizes.append(size)
     if len(group_sizes)>2:
-        print("Group sizes vary too much: {0}".format(group_sizes))
+        print("Too many group sizes: {0}".format(group_sizes))
         return False
+    if len(group_sizes)==2 and abs(int(group_sizes[0]) - int(group_sizes[1])) != 1:
+        print("Group sizes differ by more than 1: {0} and {1}".format(group_sizes[0], group_sizes[1]))
+    # check that the group sizes are the same as the ones advertised
     for size in group_sizes:
         if size not in expected_group_sizes:
-            print("Group sizes are not as advertises: {0} instead of {1}".format(group_sizes, expected_group_sizes))
+            print("Group sizes are not as advertised: {0} instead of {1}".format(group_sizes, expected_group_sizes))
             return False
     for size in expected_group_sizes:
         if size not in group_sizes:
-            print("Group sizes are not as advertises: {0} instead of {1}".format(group_sizes, expected_group_sizes))
+            print("Group sizes are not as advertised: {0} instead of {1}".format(group_sizes, expected_group_sizes))
             return False
+
+    t_size1, t_num1, t_size2, t_num2 = 0, 0, 0, 0
+    for roundd in matching:
+        size1, num1, size2, num2 = 0, 0, 0, 0
+        for group in roundd:
+            if len(group) != size1 and size1 == 0:
+                size1 = len(group)
+                num1 +=1
+            elif len(group) != size1 and size1 != 0:
+                if len(group) != size2 and size2 == 0:
+                    size2 = len(group)
+                    num2 += 1
+                elif len(group) != size2 and size2 != 0:
+                    pass
+                elif len(group) == size2:
+                    num2 += 1
+            elif len(group) == size1:
+                num1 += 1
+        if t_size1 == 0:
+            t_size1 = size1
+            t_num1 = num1
+            t_size2 = size2
+            t_num2 = num2
+        else:
+            if t_size1 == size1:
+                if t_num1 != num1:
+                    print("Error occurrences of groups differ here: tsize1={0}, tnum1= {1}, size1= {2}, num1={3}".format(t_size1, t_num1, size1, num1))
+            elif t_size1 == size2:
+                if t_num1 != num2:
+                    print("Error occurrences of groups differ here: tsize1={0}, tnum1= {1}, size1= {2}, num1={3}".format(t_size1, t_num1, size2, num2))
+            else:
+                print("Error occurrences of groups differ here- This error case shouldn't happen")
+            if t_size2 == size1:
+                if t_num2 != num1:
+                    print("Error occurrences of groups differ here: tsize1={0}, tnum1= {1}, size1= {2}, num1={3}".format(t_size2, t_num2, size1, num1))
+            elif t_size2 == size2:
+                if t_num2 != num2:
+                    print("Error occurrences of groups differ here: tsize1={0}, tnum1= {1}, size1= {2}, num1={3}".format(t_size2, t_num2, size2, num2))
+            else:
+                print("Error occurrences of groups differ here- This error case should not happen")
     return True
 
 

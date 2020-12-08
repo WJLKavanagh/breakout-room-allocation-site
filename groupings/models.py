@@ -16,6 +16,7 @@ class Allocation(models.Model):
         for group in roundd:
             if len(group) != size1 and size1 == 0:
                 size1 = len(group)
+                num1 += 1
             elif len(group) != size1 and size1 != 0:
                 if len(group) != size2 and size2 == 0:
                     size2 = len(group)
