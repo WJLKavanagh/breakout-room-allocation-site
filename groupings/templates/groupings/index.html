@@ -43,7 +43,17 @@
 			
 			<p>The range of this number will vary depending on class size (for example, ten rounds for a class of fifteen is impossible), and it should be a number between 3 and 29. You will be able to see all allocation schedules with at least this number of rounds.</p>
 			
-			<p>Note that you do not specify the  size of the groups: the system will automatically generate good balanced allocation schedules.  More than one allocation schedule may be available for your combination of class size and number of rounds.</p>
+			<p>Note that you do not specify the  size of the groups: the system will automatically generate 
+			<a href="#" data-toggle="popover" title="Definition" data-html="true" data-bs-placement="auto left" data-content=
+			"For a set of v participants, a good balanced allocation schedule is a balanced allocation schedule for which: 
+			<ol>
+			<li>there are at most 2 group sizes,</li>
+			<li>group sizes differ by at most 1,</li>
+			<li>every round has the same distribution of group sizes,</li>
+			<li>if v ≥ 12 all groups have size at least,</li>
+			<li>If v ≥ 20 and there are two group sizes then all groups have size between 4 and 6.</li>
+			</ol>"
+			>good balanced allocation schedules</a>.  More than one allocation schedule may be available for your combination of class size and number of rounds.</p>
 			
 			<p>If your class size is greater than 70, we suggest that you split it into subsets containing fewer than 70 students, and generate a separate allocation schedule for each subset.</p>
 			
@@ -96,6 +106,10 @@
 
 
     <script>
+
+		$(document).ready(function(){
+			$('[data-toggle="popover"]').popover();
+		});
 
         updateURL = function() {
 			var rounds =document.getElementById('roundsForm').value;
