@@ -28,7 +28,16 @@ class Allocation(models.Model):
             elif len(group) == size1:
                 num1 += 1
         if size2 == 0:
-            return "{1} participants for {0} rounds with {2} groups of size {3}".format(self.num_rounds, self.num_participants, num1, size1) #{0} rounds for {1} with group size of {2}
+            if num1 != 1:
+                return "{1} participants for {0} rounds with {2} groups of size {3}".format(self.num_rounds, self.num_participants, num1, size1) #{0} rounds for {1} with group size of {2}
+            else:
+                return "{1} participants for {0} rounds with {2} group of size {3}".format(self.num_rounds, self.num_participants, num1, size1) #{0} rounds for {1} with group size of {2}
+        if num1 == 1 and num2 == 1:
+            return "{1} participants for {0} rounds with {2} group of size {3} and {4} group of size {5}".format(self.num_rounds, self.num_participants, num1, size1, num2, size2) #{0} rounds for {1} with group size between {2} and {3}
+        elif num1 == 1 and num2 != 1:
+            return "{1} participants for {0} rounds with {2} group of size {3} and {4} groups of size {5}".format(self.num_rounds, self.num_participants, num1, size1, num2, size2) #{0} rounds for {1} with group size between {2} and {3}
+        elif num1 != 1 and num2 ==1:
+            return "{1} participants for {0} rounds with {2} groups of size {3} and {4} group of size {5}".format(self.num_rounds, self.num_participants, num1, size1, num2, size2) #{0} rounds for {1} with group size between {2} and {3}
         return "{1} participants for {0} rounds with {2} groups of size {3} and {4} groups of size {5}".format(self.num_rounds, self.num_participants, num1, size1, num2, size2) #{0} rounds for {1} with group size between {2} and {3}
 
         # This is some legacy code that I have no idea what it is doing
