@@ -6,18 +6,31 @@ class Allocation(models.Model):
     def __str__(self):
         
         a = eval(self.matching)     # evaluate allocation string
-        max_size = 0
-        min_size = self.num_participants
-        for round in a:
-            for g in round:
-                if len(g) > max_size:
-                    max_size = len(g)
-                if len(g) < min_size:
-                    min_size = len(g)
-        if min_size == max_size:
-            return "{1} participants for {0} rounds with group size of {2}".format(self.num_rounds, self.num_participants, min_size) #{0} rounds for {1} with group size of {2}
-        return "{1} participants for {0} rounds with group size of {2} and {3}".format(self.num_rounds, self.num_participants, min_size, max_size) #{0} rounds for {1} with group size between {2} and {3}
-        
+        # Here we will assume that the matching has at most 2 group sizes
+        # This should already be checked by the populate script
+        size1, num1 = 0, 0
+        size2, num2 = 0, 0
+
+        #for roundd in a:
+        roundd = a[0]
+        for group in roundd:
+            if len(group) != size1 and size1 == 0:
+                size1 = len(group)
+            elif len(group) != size1 and size1 != 0:
+                if len(group) != size2 and size2 == 0:
+                    size2 = len(group)
+                    num2 += 1
+                elif len(group) != size2 and size2 != 0:
+                    pass
+                elif len(group) == size2:
+                    num2 += 1
+            elif len(group) == size1:
+                num1 += 1
+        if size2 == 0:
+            return "{1} participants for {0} rounds with {2} groups of size {3}".format(self.num_rounds, self.num_participants, num1, size1) #{0} rounds for {1} with group size of {2}
+        return "{1} participants for {0} rounds with {2} groups of size {3} and {4} groups of size {5}".format(self.num_rounds, self.num_participants, num1, size1, num2, size2) #{0} rounds for {1} with group size between {2} and {3}
+
+        # This is some legacy code that I have no idea what it is doing
         return str(eval(self.matching))     # evaluate allocation string
         ret_string = ""
         for round in a:
