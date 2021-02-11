@@ -13,6 +13,7 @@ def main():
     onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     result = []
     pkindex = 0
+    all_correct = True
 
     for filename in onlyfiles:
         print("Loading data from: "+filename)
@@ -27,6 +28,7 @@ def main():
         #print(num_participants)
         if not is_correct(matching, expected_participants, expected_group_sizes):
             print("Error for matching in {0}".format(filename))
+            all_correct = False
             #break
         num_participants=0
         for group in matching[0]:
@@ -48,6 +50,10 @@ def main():
     json.dump(result, file)
     file.close()
     print ("done")
+    if all_correct:
+        print("Success!")
+    else:
+        print("Failures found")
 
 
 def is_correct(matching, expected_participants, expected_group_sizes):
