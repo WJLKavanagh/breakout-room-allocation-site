@@ -136,19 +136,25 @@ def is_correct(matching, expected_participants, expected_group_sizes):
             if t_size1 == size1:
                 if t_num1 != num1:
                     print("Error occurrences of groups differ here: tsize1={0}, tnum1= {1}, size1= {2}, num1={3}".format(t_size1, t_num1, size1, num1))
+                    return False
             elif t_size1 == size2:
                 if t_num1 != num2:
-                    print("Error occurrences of groups differ here: tsize1={0}, tnum1= {1}, size1= {2}, num1={3}".format(t_size1, t_num1, size2, num2))
+                    print("Error occurrences of groups differ here: tsize1={0}, tnum1= {1}, size2= {2}, num2={3}".format(t_size1, t_num1, size2, num2))
+                    return False
             else:
                 print("Error occurrences of groups differ here- This error case shouldn't happen")
+                return False
             if t_size2 == size1:
                 if t_num2 != num1:
-                    print("Error occurrences of groups differ here: tsize1={0}, tnum1= {1}, size1= {2}, num1={3}".format(t_size2, t_num2, size1, num1))
+                    print("Error occurrences of groups differ here: tsize2={0}, tnum2= {1}, size1= {2}, num1={3}".format(t_size2, t_num2, size1, num1))
+                    return False
             elif t_size2 == size2:
                 if t_num2 != num2:
-                    print("Error occurrences of groups differ here: tsize1={0}, tnum1= {1}, size1= {2}, num1={3}".format(t_size2, t_num2, size2, num2))
+                    print("Error occurrences of groups differ here: tsize2={0}, tnum2= {1}, size2= {2}, num2={3}".format(t_size2, t_num2, size2, num2))
+                    return False
             else:
                 print("Error occurrences of groups differ here- This error case should not happen")
+                return False
     return True
 
 
