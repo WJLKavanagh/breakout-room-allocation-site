@@ -19,9 +19,9 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 
-        
+
     <div class="max-auto container pt-3 pb-3 mt-5" style="background-color:burlywood">
-        
+
         <div class="container-fluid" >
 
             <h3>BoRAT - Breakout Room Allocation schedule Tool</h3>
@@ -29,24 +29,26 @@
             <div class="mt-4"></div>
 
             <p style="padding: 10px; border: 2px solid white;"><span style="color: white">We'd love to hear how you use our allocations.</span> Please email us at alice.miller AT glasgow.ac.uk and let us know!</br></br>
-			This tool is based on "Breakout Group Allocation Schedules and the Social Golfer Problem with Adjacent Group Sizes", by Alice Miller, Matthew Barr, William Kavanagh, Ivaylo Valkov and Helen C. Purchase. Published in the <a href="https://www.mdpi.com/2073-8994/13/1/13">Symmetry Journal</a>, December 2020. Please cite us if you use this tool.</p>
+			This tool is based on "Breakout Group Allocation Schedules and the Social Golfer Problem with Adjacent Group Sizes", by Alice Miller, Matthew Barr, William Kavanagh, Ivaylo Valkov and Helen C. Purchase. Published in the <a href="https://www.mdpi.com/2073-8994/13/1/13">Symmetry Journal</a>, December 2020. Please cite us if you use this tool.</br></br>
+			The constructions used in this paper are the subject of the following paper, currently under review:</br>
+            “Combinatorial solutions to the Social Golfer Problem and Social Golfer Problem with Adjacent Group Sizes”, by Alice Miller, Ivaylo Valkov and R. Julian R. Abel.</p>
 
             <p>This page will produce an allocation schedule that will allow you to specify group membership for students when creating Zoom breakout rooms.</p>
 
             <p>Each generated allocation schedule comprises a set of 'rounds', where each round is a set of student groups. The primary constraint for an allocation schedule is that no two students will be paired with each other more than once.</p>
 
             <p>To generate an allocation schedule, you need to specify:</p>
-			
+
 			<ol>
 				<li>the number of students in your class, a number between 6 and 100 (and some instances for up to 125)</li>
 				<li>the number of rounds required</li>
 			</ol>
-			
+
 			<p>The range of this second number will vary depending on class size (for example, ten rounds for a class of fifteen is impossible), and it should be a number between 3 and 40. You will be able to see all allocation schedules with at least this number of rounds. If no such allocations exist try reducing the number of rounds.</p>
-			
-			<p>Note that you do not specify the  size of the groups: the system will automatically generate 
+
+			<p>Note that you do not specify the  size of the groups: the system will automatically generate
 			<a href="#" data-toggle="popover" title="Definition" data-html="true" data-bs-placement="auto left" data-content=
-			"For a set of v participants, a good balanced allocation schedule is a balanced allocation schedule for which: 
+			"For a set of v participants, a good balanced allocation schedule is a balanced allocation schedule for which:
 			<ol>
 			<li>there are at most 2 group sizes,</li>
 			<li>group sizes differ by at most 1,</li>
@@ -55,13 +57,13 @@
 			<li>If v ≥ 20 and there are two group sizes then all groups have size between 4 and 6.</li>
 			</ol>"
 			>good balanced allocation schedules</a>.  More than one allocation schedule may be available for your combination of class size and number of rounds.</p>
-			
+
 			<p>If your class size is larger than 100, we suggest that you split it into subsets containing fewer than 100 students, and generate a separate allocation schedule for each subset.</p>
-			
+
 			<p>Once an allocation schedule has been generated, if you wish, you will be able to associate the schedule with a list of student email addresses.</p>
 
         </div>
-        
+
     </div>
 
     <div class="max-auto container mt-3 pt-2 pb-5" style="background-color:aliceblue">
@@ -71,11 +73,11 @@
                 <h3>Your requirements</h3>
 
         </div>
-        
+
         <div class="container-fluid" >
             <form>
                 <div class="form-group mt-3">
-                    
+
                     <input type="number" class="form-control form-control-lg mt-3 mb-3" id="participantsForm" onchange="updateURL()" placeholder="Class size">
                     <input type="number" class="form-control form-control-lg mt-3 mb-3" id="roundsForm" onchange="updateURL()" placeholder="Number of rounds">
 
@@ -86,7 +88,7 @@
                 <a href="/allocate/9over3" id="QueryButton" type="button" class="btn btn-lg btn-primary">
                   Find allocations
                 </a>
-              </div> 
+              </div>
 
 
         </div>
