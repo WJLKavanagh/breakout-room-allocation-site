@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
@@ -17,9 +18,20 @@ def query(request, participants, rounds):
         allocations = Allocation.objects.filter(num_participants=participants, num_rounds__gte=rounds)
     except Allocation.DoesNotExist:
         allocations = None
-    
+
     context = {"participants":participants, "rounds":rounds, "allocations":allocations}
     return render(request, "groupings/query.html", context)
+
+def raw(request, participants):
+    try:
+        allocations = Allocation.objects.filter(num_participants=participants)
+    except Allocation.DoesNotExist:
+        allocations = []
+    mylist=[]
+    for allocation in allocations:
+        mylist.append({"num_participants":allocation.num_participants,"num_rounds":allocation.num_rounds,"matching":allocation.matching})
+    return JsonResponse({"allocations":mylist})
+
 
 def show_all(request):
     return render(request, "groupings/all.html", {"allocations":Allocation.objects.all()})
@@ -53,7 +65,6 @@ def parse_upload(request, alloc_id):
             return HttpResponse('Invalid form submitted:\n'+str(request.FILES['upload_file'].read()), content_type="text/plain")
     else:
         return HttpResponse('Not a Post.', content_type="text/plain")
-
 
 def parse_text(request, alloc_id):
     if request.method == 'POST':
