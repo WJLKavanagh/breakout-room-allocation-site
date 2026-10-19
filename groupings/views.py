@@ -7,6 +7,26 @@ from django.core.files.storage import FileSystemStorage
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 
+# import logging, logging.config
+# import sys
+
+# LOGGING = {
+#     'version': 1,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#             'stream': sys.stdout,
+#         }
+#     },
+#     'root': {
+#         'handlers': ['console'],
+#         'level': 'INFO'
+#     }
+# }
+
+# logging.config.dictConfig(LOGGING)
+# logging.info('Hello')
+
 from .models import Allocation
 from .forms import UploadFileForm, ManualFileForm
 
@@ -29,8 +49,18 @@ def raw(request, participants):
         allocations = []
     mylist=[]
     for allocation in allocations:
-        mylist.append({"num_participants":allocation.num_participants,"num_rounds":allocation.num_rounds,"matching":allocation.matching})
+        mylist.append({"num_participants":allocation.num_participants,"num_rounds":allocation.num_rounds,"matching":allocation.matching,"id":allocation.pk})
     return JsonResponse({"allocations":mylist})
+
+def raw_by_id(request, id):
+    try:
+        allocation = Allocation.objects.filter(id=id)
+    except Allocation.DoesNotExist:
+        allocation = []
+    mylist=[]
+    if len(allocation) == 1:
+        mylist = {"num_participants":allocation[0].num_participants,"num_rounds":allocation[0].num_rounds,"matching":allocation[0].matching,"id":allocation[0].pk}       
+    return JsonResponse({"allocation":mylist})
 
 
 def show_all(request):
