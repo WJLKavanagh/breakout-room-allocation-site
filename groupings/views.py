@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.views.decorators.csrf import csrf_exempt
 
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -42,6 +43,7 @@ def query(request, participants, rounds):
     context = {"participants":participants, "rounds":rounds, "allocations":allocations}
     return render(request, "groupings/query.html", context)
 
+@csrf_exempt
 def raw(request, participants):
     try:
         allocations = Allocation.objects.filter(num_participants=participants)
@@ -52,6 +54,7 @@ def raw(request, participants):
         mylist.append({"num_participants":allocation.num_participants,"num_rounds":allocation.num_rounds,"matching":allocation.matching,"id":allocation.pk})
     return JsonResponse({"allocations":mylist})
 
+@csrf_exempt
 def raw_by_id(request, id):
     try:
         allocation = Allocation.objects.filter(id=id)
